@@ -229,8 +229,16 @@
                     ToolTip="Click on Update button to update."
                     SelectionMode="Extended" SelectionUnit="CellOrRowHeader" 
                     SelectedCellsChanged="SelectedCellsChanged"
-                    AlternatingRowBackground="#FFF2F1A4" RowBackground="#FFCACAE2">
+                    AlternatingRowBackground="#7F72F1A4" RowBackground="#FFCACAE2">
                     <WPFToolKit:DataGrid.Columns>
+                       <WPFToolKit:DataGridTextColumn 
+                          x:Name="TimeStampColumn"
+                          Header="TimeStamp" 
+                          Binding="{Binding TimeStamp, StringFormat ={}{0:dd/MM/yyTHH:mm:ss.fffffff}}" 
+                          MinWidth="60"
+                          IsReadOnly="True"                        
+                          HeaderStyle="{StaticResource CenterAlign}"
+                          ElementStyle="{StaticResource RightAlign}" />
                         <WPFToolKit:DataGridTextColumn 
                         x:Name="EventNameColumn"
                         Header="Event Name" 
@@ -239,13 +247,13 @@
                         IsReadOnly="True"
                         HeaderStyle="{StaticResource CenterAlign}" />
                         <WPFToolKit:DataGridTextColumn 
-                        x:Name="TimeMSecColumn"
-                        Header="Time MSec" 
-                        Binding="{Binding TimeStampRelatveMSec, StringFormat={}{0:n3}}" 
-                        MinWidth="60"
-                        IsReadOnly="True"                        
-                        HeaderStyle="{StaticResource CenterAlign}"
-                        ElementStyle="{StaticResource RightAlign}" />
+                          x:Name="TimeMSecColumn"
+                          Header="Time MSec" 
+                          Binding="{Binding TimeStampRelatveMSec, StringFormat={}{0:n3}}" 
+                          MinWidth="60"
+                          IsReadOnly="True"                        
+                          HeaderStyle="{StaticResource CenterAlign}"
+                          ElementStyle="{StaticResource RightAlign}" />
                         <WPFToolKit:DataGridTextColumn
                         x:Name="ProcessNameColumn" 
                         Header="Process Name" 

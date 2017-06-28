@@ -450,6 +450,7 @@ namespace PerfView
                 if (!m_processName.StartsWith("("))
                     m_processName += " (" + data.ProcessID + ")";
                 m_timeStampRelativeMSec = data.TimeStampRelativeMSec;
+                m_timeStamp = data.TimeStamp;
                 m_idx = data.EventIndex;
 
                 // Compute the data column 
@@ -532,6 +533,8 @@ namespace PerfView
             public override string EventName { get { return m_name; } }
             public override string ProcessName { get { return m_processName; } }
             public override double TimeStampRelatveMSec { get { return m_timeStampRelativeMSec; } }
+            public  DateTime TimeStamp { get { return m_timeStamp; } }
+
             public override string Rest { get { return m_asText; } set { } }
             public EventIndex Index { get { return m_idx; } }
 
@@ -620,6 +623,7 @@ namespace PerfView
             string m_name;
             string m_processName;
             internal double m_timeStampRelativeMSec;
+            internal DateTime m_timeStamp;
             string m_asText;
             EventIndex m_idx;
             ETWEventSource m_source;        // Lets you get at source information
