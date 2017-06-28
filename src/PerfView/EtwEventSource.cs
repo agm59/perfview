@@ -472,7 +472,7 @@ namespace PerfView
                     AddField("FormattedMessage", message, columnOrder, restString);
 
                 if (0 < durationMSec)
-                    AddField("DURATION_MSEC", durationMSec.ToString("n3"), columnOrder, restString);
+                    AddField("DURATION_MSEC", durationMSec.ToString("n4"), columnOrder, restString);
 
                 var payloadNames = data.PayloadNames;
                 if (payloadNames.Length == 0 && data.EventDataLength != 0)
@@ -617,7 +617,10 @@ namespace PerfView
                     return true;
                 if (textRegex.IsMatch(TimeStampRelatveMSec.ToString("n3")))
                     return true;
-                return false;
+               if (textRegex.IsMatch(TimeStamp.ToString("dd/MM/yyTHH:mm:ss.fffffff")))
+                  return true;
+
+            return false;
             }
 
             string m_name;

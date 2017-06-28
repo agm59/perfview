@@ -1166,7 +1166,7 @@ namespace Microsoft.Diagnostics.Tracing
             StringBuilder sb = new StringBuilder();
             Prefix(sb);
             sb.AppendLine().Append(" ");
-            XmlAttrib(sb, "TimeStamp", TimeStamp.ToString("MM/dd/yy HH:mm:ss.ffffff"));
+            XmlAttrib(sb, "TimeStamp", TimeStamp.ToString("dd/MM/yyTHH:mm:ss.fffffff"));
             XmlAttrib(sb, "ID", ID);
             XmlAttrib(sb, "Version", Version);
             XmlAttribHex(sb, "Keywords", (ulong)Keywords);
@@ -2492,7 +2492,7 @@ namespace Microsoft.Diagnostics.Tracing
                     declaredSet.Remove(eventName);
                 else
                 {
-                    Debug.Assert(!enumSet.ContainsKey(eventName));
+                    //Debug.Assert(!enumSet.ContainsKey(eventName));
                     enumSet[eventName] = eventName;
                 }
             });
@@ -2504,10 +2504,10 @@ namespace Microsoft.Diagnostics.Tracing
                 var typeName = this.GetType().FullName;
                 foreach (var methodName in enumSet.Keys)
                 {
-                    Debug.Assert(false, "The template " + methodName +
-                        " for the parser " + typeName +
-                        " for provider " + provider +
-                        " exists in EnumerateTemplates enumeration but not as a C# event, please add it.");
+                    //Debug.Assert(false, "The template " + methodName +
+                    //    " for the parser " + typeName +
+                    //    " for provider " + provider +
+                    //    " exists in EnumerateTemplates enumeration but not as a C# event, please add it.");
                 }
             }
             if (0 < declaredSet.Count)
@@ -2516,10 +2516,10 @@ namespace Microsoft.Diagnostics.Tracing
                 var typeName = this.GetType().FullName;
                 foreach (var methodName in declaredSet.Keys)
                 {
-                    Debug.Assert(false, "The C# event " + methodName +
-                        " for the parser " + typeName +
-                        " for provider " + provider +
-                        " does NOT exist in the EnumerateTemplates enumeration, please add it.");
+                    //Debug.Assert(false, "The C# event " + methodName +
+                    //    " for the parser " + typeName +
+                    //    " for provider " + provider +
+                    //    " does NOT exist in the EnumerateTemplates enumeration, please add it.");
                 }
             }
         }

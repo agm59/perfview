@@ -73,6 +73,8 @@ namespace PerfView
                             morphedContent = PerfDataGrid.GoodPrecision((float)cellContent, clipboardContent.Column);
                         else if (cellContent is double)
                             morphedContent = PerfDataGrid.GoodPrecision((double)cellContent, clipboardContent.Column);
+                        else if (cellContent is DateTime)
+                           morphedContent =  ((DateTime) cellContent).ToString("dd/MM/yyTHH:mm:ss.fffffff");
                         else if (cellContent != null)
                             morphedContent = cellContent.ToString();
                         else
@@ -148,7 +150,7 @@ namespace PerfView
                 using (var csvFile = File.CreateText(csvFileName))
                 {
                     // Write out column header
-                    csvFile.Write("Event Name{0}Time MSec{0}Process Name", listSeparator);
+                    csvFile.Write("TimeStamp{0}Event Name{0}Time MSec{0}Process Name", listSeparator);
                     var maxField = 0;
                     var hasRest = true;
                     if (m_source.ColumnsToDisplay != null)
@@ -177,7 +179,7 @@ namespace PerfView
                         if (_event.EventName == null)
                             return false;
 
-                        csvFile.Write("{0}{1}{2:f3}{1}{3}", _event.EventName, listSeparator, _event.TimeStampRelatveMSec, EscapeForCsv(_event.ProcessName, listSeparator));
+                        csvFile.Write("{0:dd/MM/yyTHH:mm:ss.fffffff}{1}{2}{1}{3:f3}{1}{4}", (_event as ETWEventSource.ETWEventRecord)?.TimeStamp, listSeparator, _event.EventName, _event.TimeStampRelatveMSec, EscapeForCsv(_event.ProcessName, listSeparator));
                         var fields = _event.DisplayFields;
                         for (int i = 0; i < maxField; i++)
                             csvFile.Write("{0}{1}", listSeparator, EscapeForCsv(fields[i], listSeparator));
@@ -212,8 +214,8 @@ namespace PerfView
                         if (_event.EventName == null)
                             return false;
 
-                        xmlFile.Write(" <Event EventName=\"{0}\" TimeMsec=\"{1:f3}\" ProcessName=\"{2}\"",
-                            _event.EventName, _event.TimeStampRelatveMSec, XmlUtilities.XmlEscape(_event.ProcessName));
+                        xmlFile.Write(" <Event TimeStamp=\"{0:dd/MM/yyTHH:mm:ss.fffffff}\" EventName=\"{1}\" TimeMsec=\"{2:f3}\" ProcessName=\"{3}\"",
+                            (_event as ETWEventSource.ETWEventRecord)?.TimeStamp, _event.EventName, _event.TimeStampRelatveMSec, XmlUtilities.XmlEscape(_event.ProcessName));
 
                         bool displayRest = true;
                         if (m_source.ColumnsToDisplay != null)
@@ -787,12 +789,14 @@ namespace PerfView
                     }
                 }
 
-                var item = list[curPos] as EventRecord;
+                var item = list[curPos] as ETWEventSource.ETWEventRecord;
+                var ts = item.TimeStamp.ToString("dd/MM/yyTHH:mm:ss.fffffff");
                 var foundItem = m_findPat.IsMatch(item.Rest) || m_findPat.IsMatch(item.EventName) ||
-                    m_findPat.IsMatch(item.ProcessName) || m_findPat.IsMatch(item.TimeStampRelatveMSec.ToString());
+                    m_findPat.IsMatch(item.ProcessName) || m_findPat.IsMatch(item.TimeStampRelatveMSec.ToString())
+                    || m_findPat.IsMatch(item.TimeStamp.ToString("dd/MM/yyTHH:mm:ss.fffffff"));
                 var fields = item.DisplayFields;
                 for (int i = 0; i < fields.Length; i++)
-                {
+                {                                                                                  
                     if (foundItem)
                         break;
                     var field = fields[i];
@@ -1314,6 +1318,11 @@ namespace PerfView
 
         float[] m_buckets;                              // Keep track of the counts of events.  
         double m_bucketTimeMSec;                        // Size for each bucket
-        #endregion
+      #endregion
+
+       private void TimeStampColumn_OnCopyingCellClipboardContent(object sender, DataGridCellClipboardEventArgs e)
+       {
+         Clipboard.SetText(((DateTime)e.Content).ToString("o"));
+       }
     }
 }
